@@ -1,23 +1,30 @@
-package com.openclassrooms.firebaseoc;
+package com.openclassrooms.firebaseoc.ui;
 
 import androidx.annotation.Nullable;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseUser;
+import com.openclassrooms.firebaseoc.R;
 import com.openclassrooms.firebaseoc.databinding.ActivityMainBinding;
+import com.openclassrooms.firebaseoc.ui.manager.UserManager;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     private static final int RC_SIGN_IN = 123;
+    private UserManager userManager = UserManager.getInstance();
 
     @Override
     ActivityMainBinding getViewBinding() {
@@ -33,9 +40,31 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     private void setupListeners(){
         //Login/Profile Button
         binding.loginButton.setOnClickListener(view -> {
-            startSignInActivity();
+            if(userManager.isCurrentUserLogged()){
+                startProfileActivity();
+            }else{
+                startSignInActivity();
+            }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateLoginButton();
+    }
+
+    // Launching Profile Activity
+    private void startProfileActivity(){
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    // Update Login Button when activity is resuming
+    private void updateLoginButton(){
+        binding.loginButton.setText(userManager.isCurrentUserLogged() ? getString(R.string.button_login_text_logged) : getString(R.string.button_login_text_not_logged));
+    }
+
 
     private void startSignInActivity(){
 
