@@ -12,6 +12,7 @@ import com.openclassrooms.firebaseoc.databinding.ActivityProfileBinding;
 import com.openclassrooms.firebaseoc.ui.manager.UserManager;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 /**
  * Created by <Victor Khamvongsa> on <15/04/2022>
@@ -35,9 +36,31 @@ public class ProfileActivity extends BaseActivity<ActivityProfileBinding> {
 
     private void setupListeners(){
         binding.updateButton.setOnClickListener(view -> { });
-        binding.signOutButton.setOnClickListener(view -> { });
-        binding.deleteButton.setOnClickListener(view -> { });
+        // Sign out button
+        binding.signOutButton.setOnClickListener(view -> {
+            userManager.signOut(this).addOnSuccessListener(aVoid -> {
+                finish();
+            });
+        });
+
+        // Delete button
+        binding.deleteButton.setOnClickListener(view -> {
+
+            new AlertDialog.Builder(this)
+                    .setMessage(R.string.popup_message_confirmation_delete_account)
+                    .setPositiveButton(R.string.popup_message_choice_yes, (dialogInterface, i) ->
+                            userManager.deleteUser(ProfileActivity.this)
+                                    .addOnSuccessListener(aVoid -> {
+                                                finish();
+                                            }
+                                    )
+                    )
+                    .setNegativeButton(R.string.popup_message_choice_no, null)
+                    .show();
+
+        });
     }
+
 
     private void updateUIWithUserData(){
         if(userManager.isCurrentUserLogged()){
