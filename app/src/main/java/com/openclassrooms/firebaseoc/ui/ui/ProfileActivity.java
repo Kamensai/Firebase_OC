@@ -1,8 +1,9 @@
-package com.openclassrooms.firebaseoc.ui;
+package com.openclassrooms.firebaseoc.ui.ui;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -23,7 +24,7 @@ public class ProfileActivity extends BaseActivity<ActivityProfileBinding> {
 
 
     @Override
-    ActivityProfileBinding getViewBinding() {
+    protected ActivityProfileBinding getViewBinding() {
         return ActivityProfileBinding.inflate(getLayoutInflater());
     }
 
@@ -35,7 +36,21 @@ public class ProfileActivity extends BaseActivity<ActivityProfileBinding> {
     }
 
     private void setupListeners(){
-        binding.updateButton.setOnClickListener(view -> { });
+
+        // Mentor Checkbox
+        binding.isMentorCheckBox.setOnCheckedChangeListener((compoundButton, checked) -> {
+            userManager.updateIsMentor(checked);
+        });
+
+        // Update button
+        binding.updateButton.setOnClickListener(view -> {
+            binding.progressBar.setVisibility(View.VISIBLE);
+            userManager.updateUsername(binding.usernameEditText.getText().toString())
+                    .addOnSuccessListener(aVoid -> {
+                        binding.progressBar.setVisibility(View.INVISIBLE);
+                    });
+        });
+
         // Sign out button
         binding.signOutButton.setOnClickListener(view -> {
             userManager.signOut(this).addOnSuccessListener(aVoid -> {
@@ -70,6 +85,7 @@ public class ProfileActivity extends BaseActivity<ActivityProfileBinding> {
                 setProfilePicture(user.getPhotoUrl());
             }
             setTextUserData(user);
+            getUserData();
         }
     }
 
@@ -89,5 +105,14 @@ public class ProfileActivity extends BaseActivity<ActivityProfileBinding> {
         //Update views with data
         binding.usernameEditText.setText(username);
         binding.emailTextView.setText(email);
+    }
+
+    private void getUserData(){
+        userManager.getUserData().addOnSuccessListener(user -> {
+            // Set the data with the user information
+            String username = TextUtils.isEmpty(user.getUsername()) ? getString(R.string.info_no_username_found) : user.getUsername();
+            binding.isMentorCheckBox.setChecked(user.getIsMentor());
+            binding.usernameEditText.setText(username);
+        });
     }
 }

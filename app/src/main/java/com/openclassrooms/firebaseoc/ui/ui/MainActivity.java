@@ -1,22 +1,18 @@
-package com.openclassrooms.firebaseoc.ui;
+package com.openclassrooms.firebaseoc.ui.ui;
 
 import androidx.annotation.Nullable;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseUser;
 import com.openclassrooms.firebaseoc.R;
 import com.openclassrooms.firebaseoc.databinding.ActivityMainBinding;
 import com.openclassrooms.firebaseoc.ui.manager.UserManager;
+import com.openclassrooms.firebaseoc.ui.ui.chat.MentorChatActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +23,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     private UserManager userManager = UserManager.getInstance();
 
     @Override
-    ActivityMainBinding getViewBinding() {
+    protected ActivityMainBinding getViewBinding() {
         return ActivityMainBinding.inflate(getLayoutInflater());
     }
 
@@ -46,6 +42,15 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 startSignInActivity();
             }
         });
+
+        // Chat Button
+        binding.chatButton.setOnClickListener(view -> {
+            if(userManager.isCurrentUserLogged()){
+                startMentorChatActivity();
+            }else{
+                showSnackBar(getString(R.string.error_not_connected));
+            }
+        });
     }
 
     @Override
@@ -60,11 +65,17 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         startActivity(intent);
     }
 
+    // Launch Mentor Chat Activity
+    private void startMentorChatActivity(){
+        Intent intent = new Intent(this, MentorChatActivity.class);
+        startActivity(intent);
+    }
+
+
     // Update Login Button when activity is resuming
     private void updateLoginButton(){
         binding.loginButton.setText(userManager.isCurrentUserLogged() ? getString(R.string.button_login_text_logged) : getString(R.string.button_login_text_not_logged));
     }
-
 
     private void startSignInActivity(){
 
@@ -106,7 +117,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         if (requestCode == RC_SIGN_IN) {
             // SUCCESS
             if (resultCode == RESULT_OK) {
-                //userManager.createUser();
+                userManager.createUser();
                 showSnackBar(getString(R.string.connection_succeed));
             } else {
                 // ERRORS

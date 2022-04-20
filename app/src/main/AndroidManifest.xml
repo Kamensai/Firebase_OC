@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.MainActivity"
+        <activity android:name=".ui.ui.MainActivity"
             android:theme="@style/AppTheme.NoTitle"> <!-- DISABLE TOOLBAR IN MAIN ACTIVITY-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,9 +21,14 @@
         </activity>
 
         <!-- PROFILE ACTIVITY -->
-        <activity android:name=".ui.ProfileActivity"
+        <activity android:name=".ui.ui.ProfileActivity"
             android:label="@string/toolbar_title_login_activity"
-            android:parentActivityName=".ui.MainActivity"/>
+            android:parentActivityName=".ui.ui.MainActivity"/>
+
+        <!-- MENTOR CHAT ACTIVITY -->
+        <activity android:name=".ui.ui.chat.MentorChatActivity"
+            android:label="@string/toolbar_title_mentor_chat_activity"
+            android:parentActivityName=".ui.ui.MainActivity"/>
 
     </application>
 
