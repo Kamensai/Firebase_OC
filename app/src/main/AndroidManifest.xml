@@ -31,6 +31,14 @@
             android:label="@string/toolbar_title_mentor_chat_activity"
             android:parentActivityName=".ui.ui.MainActivity"/>
 
+        <!-- NOTIFICATION SERVICE -->
+        <service
+            android:name=".ui.notification.NotificationsService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
