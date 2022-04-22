@@ -1,5 +1,7 @@
 package com.openclassrooms.firebaseoc.ui.manager;
 
+import android.net.Uri;
+
 import com.google.firebase.firestore.Query;
 import com.openclassrooms.firebaseoc.ui.repository.ChatRepository;
 
@@ -35,4 +37,14 @@ public class ChatManager {
     public void createMessageForChat(String message, String chat){
         chatRepository.createMessageForChat(message, chat);
     }
+
+
+    public void sendMessageWithImageForChat(String message, Uri imageUri, String chat){
+        chatRepository.uploadImage(imageUri, chat).addOnSuccessListener(taskSnapshot -> {
+            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                chatRepository.createMessageWithImageForChat(uri.toString(), message, chat);
+            });
+        });
+    }
+
 }

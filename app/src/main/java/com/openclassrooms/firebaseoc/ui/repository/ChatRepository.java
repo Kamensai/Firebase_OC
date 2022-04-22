@@ -1,10 +1,17 @@
 package com.openclassrooms.firebaseoc.ui.repository;
 
+import android.net.Uri;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.openclassrooms.firebaseoc.ui.manager.UserManager;
 import com.openclassrooms.firebaseoc.ui.model.Message;
+
+import java.util.UUID;
 
 /**
  * Created by <Victor Khamvongsa> on <20/04/2022>
@@ -56,7 +63,25 @@ public final class ChatRepository {
                     .collection(MESSAGE_COLLECTION)
                     .add(message);
         });
+    }
 
+    public UploadTask uploadImage(Uri imageUri, String chat){
+        String uuid = UUID.randomUUID().toString(); // GENERATE UNIQUE STRING
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(chat + "/" + uuid);
+        return mImageRef.putFile(imageUri);
+    }
+
+    public void createMessageWithImageForChat(String urlImage, String textMessage, String chat){
+        userManager.getUserData().addOnSuccessListener(user -> {
+            // Creating Message with the URL image
+            Message message = new Message(textMessage, urlImage, user);
+
+            // Storing Message on Firestore
+            this.getChatCollection()
+                    .document(chat)
+                    .collection(MESSAGE_COLLECTION)
+                    .add(message);
+        });
     }
 
 }
