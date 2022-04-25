@@ -9,6 +9,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.openclassrooms.firebaseoc.R;
 import com.openclassrooms.firebaseoc.databinding.ActivityMainBinding;
 import com.openclassrooms.firebaseoc.ui.manager.UserManager;
@@ -19,6 +20,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
+    // private FirebaseAnalytics mFirebaseAnalytics;
     private static final int RC_SIGN_IN = 123;
     private UserManager userManager = UserManager.getInstance();
 
@@ -30,6 +32,19 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        // TODO : Voir Doc Analytics pour vérifier l'utilisation des utilisateurs https://firebase.google.com/docs/analytics/events?hl=fr&authuser=0&platform=android
+        // mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        /*
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+        */
         setupListeners();
     }
 

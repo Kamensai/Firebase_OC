@@ -42,7 +42,7 @@
     <string name="toast_title_no_image_chosen">Aucune image choisie&#8230;</string>
 
     <!-- FACEBOOK_APPLICATION_ID -->
-    <string name="facebook_application_id">480975907096327</string>
-    <string name="fb_login_protocol_scheme">fb480975907096327</string>
+    <string name="facebook_application_id" translatable="false">480975907096327</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb480975907096327</string>
 
 </resources>
